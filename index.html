@@ -21,9 +21,25 @@
   <script src="sketch.js" type="module"></script>
   <dialog id="settings-dialog">
     <form method="dialog">
-      <label for="name">End time (HH:MM):</label>
-      <input type="text" id="end-time" name="end-time">
-      <button id="ok-button">OK</button>
+      <fieldset>
+        <div>
+          <input type="radio" id="radio2" name="radio" value="2" checked>
+          <label for="radio2">Transition at a specific time (HH:MM - 24hr format):
+          </label>
+          <input type="text" id="end-time" name="end-time">
+        </div>
+        <div>
+          <div>
+            <input type="radio" id="radio1" name="radio" value="1">
+            <label for="radio1">Transition after a specific number of minutes:
+            </label>
+            <input type="text" id="minutes" name="minutes" value="30">
+          </div>
+          <input type="radio" id="radio3" name="radio" value="3">
+          <label for="radio3">Option 3</label>
+        </div>
+      </fieldset>
+      <input type="submit" id="ok-button" value="OK">
     </form>
   </dialog>
 </body>

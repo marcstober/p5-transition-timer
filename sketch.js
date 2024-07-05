@@ -31,12 +31,24 @@ function setup() {
 
   createCanvas(windowWidth, windowHeight);
 
+  // ensure radio button checked if associated text input changed
+  let textInputs = document.querySelectorAll('input[type="text"]')
+  for (let input of textInputs) {
+    input.addEventListener('change', (e) => {
+      let previousSibling = e.target.previousElementSibling;
+      while (previousSibling && previousSibling.tagName !== 'INPUT' && previousSibling.type !== 'radio') {
+        previousSibling = previousSibling.previousElementSibling;
+      }
+      if (previousSibling && previousSibling.type === 'radio') {
+        previousSibling.checked = true;
+      }
+    })
+  }
 
   // let endTimeString = prompt("End time (HH:MM)?", `${defaultEndTime.getHours()}:${defaultEndTime.getMinutes()}`)
   // endTime = parseTimeString(endTimeString)
 
   showSettingsDialog()
-
 
   // console.log("balls.length: ", balls.length)
   // balls = [
@@ -201,9 +213,24 @@ function showSettingsDialog() {
   let defaultEndTime = new Date(Date.parse("1970-01-01T20:20:00.000"))
 
   document.getElementById('end-time').value = `${defaultEndTime.getHours()}:${defaultEndTime.getMinutes()}`
-  okButton.addEventListener('click', () => {
-    dialogElement.close();
-    endTime = parseTimeString(document.getElementById('end-time').value)
+
+  const dlg = document.getElementById('settings-dialog');
+  dlg.addEventListener('submit', (e) => {
+    // dialogElement.close();
+    const fd = new FormData(e.target)
+    const opt = fd.get('radio')
+
+    if (opt == 2) { // end time
+      endTime = parseTimeString(document.getElementById('end-time').value)
+    }
+    else if (opt == 1) { // minutes
+      let addMinutes = parseInt(fd.get('minutes'))
+      endTime = new Date(Date.now() + addMinutes * 60 * 1000)
+    }
+    else if (opt == 3) {
+      // TODO: option 3 (click to spawn - old code?)
+    }
+
     handleSettingsChange()
   });
 

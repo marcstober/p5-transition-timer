@@ -5,8 +5,8 @@ const SCITECH_BLUE = "#12B6CA"
 const SCITECH_ORANGE = "#F37121"
 const SCITECH_DARKBLUE = "#04454C"
 
-const fill1 = SCITECH_BLUE
-const fill2 = SCITECH_ORANGE
+let fill1 = SCITECH_BLUE
+let fill2 = SCITECH_ORANGE
 
 // // 4th of July colors
 // const fill1 = "#6666FF" // #0000FF looks black on my projector
@@ -16,6 +16,9 @@ let endTime
 
 let notificationSound
 let alarmPlayed = false
+
+let warningMode = false
+let warningPlayed = false
 
 function preload() {
   notificationSound = loadSound('simple-notification-152054.mp3');
@@ -85,6 +88,16 @@ function draw() {
   let seconds = timeRemainingInSeconds % 60;
   let timeRemainingFormatted = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
+  if (minutes < 5) {
+    warningMode = true
+    fill1 = SCITECH_ORANGE
+    fill2 = SCITECH_BLUE
+    if (!warningPlayed) {
+      notificationSound.play()
+      warningPlayed = true
+    }
+  }
+
   if (timeRemaining <= 0 && !alarmPlayed) {
     console.log("Time's up! (should only see this once)") // debugging
     alarmPlayed = true;
@@ -113,7 +126,7 @@ function draw() {
   background("#D0E0E2");
 
   fill(fill1)
-  strokeWeight(1)
+  strokeWeight(2)
   stroke(SCITECH_DARKBLUE)
 
   // if (keyIsPressed) {
@@ -132,23 +145,26 @@ function draw() {
     fill(fill1)
   }
 
-
   push()
   fill(SCITECH_DARKBLUE)
+  strokeWeight(0)
   textSize(24)
   textAlign(LEFT, BOTTOM)
   text((new Date()).toLocaleTimeString(), 10, height - 10)
 
-  if (!endTime) {
-    return // hack?
+  if (endTime) {
+    textAlign(RIGHT, BOTTOM)
+    text(`End time: ${endTime.toLocaleTimeString()}`, width - 10, height - 10)
+    textSize(72)
+    if (warningMode) {
+      fill(SCITECH_ORANGE)
+      strokeWeight(10)
+      textSize(100)
+    }
+    textFont('"Rubik Mono One", monospace')
+    textAlign(CENTER, TOP)
+    text(timeRemainingFormatted, width / 2, 15)
   }
-
-  textAlign(RIGHT, BOTTOM)
-  text(`End time: ${endTime.toLocaleTimeString()}`, width - 10, height - 10)
-  textSize(72)
-  textFont('"Rubik Mono One", monospace')
-  textAlign(CENTER, TOP)
-  text(timeRemainingFormatted, width / 2, 15)
   pop()
 }
 
@@ -158,7 +174,10 @@ function drawGameOver() {
   textSize(100)
   textFont('"Rubik Mono One", monospace')
   textAlign(CENTER, CENTER)
+  push()
+  strokeWeight(10)
   text("Transition\nTime!", width / 2, height / 2)
+  pop()
   noLoop()
 }
 

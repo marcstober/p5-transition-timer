@@ -1,0 +1,3 @@
+[submodule "libraries/github-corners"]
+	path = libraries/github-corners
+	url = https://github.com/tholman/github-corners

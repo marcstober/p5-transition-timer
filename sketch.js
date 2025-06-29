@@ -148,7 +148,7 @@ function draw() {
   for (let ball of balls) {
 
     for (let ball2 of balls) {
-      if (ball !== ball2 && checkCollision(ball, ball2)) {
+      if (ball !== ball2 && checkCircleCircleCollision(ball, ball2)) {
         fill(fill2)
       }
     }
@@ -200,7 +200,7 @@ function mouseClicked() {
 
 }
 
-function checkCollision(ball1, ball2) {
+function checkCircleCircleCollision(ball1, ball2) {
   let distance = dist(ball1.x, ball1.y, ball2.x, ball2.y)
   let sumOfRadii = ball1.r + ball2.r
   return distance <= sumOfRadii

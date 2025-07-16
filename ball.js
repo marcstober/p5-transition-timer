@@ -14,8 +14,16 @@ class Ball {
         return this.positionVector.x
     }
 
+    set x(value) {
+        this.positionVector.x = value
+    }
+
     get y() {
         return this.positionVector.y
+    }
+
+    set y(value) {
+        this.positionVector.y = value
     }
 
     draw() {

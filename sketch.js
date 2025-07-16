@@ -237,5 +237,14 @@ function showSettingsDialog() {
   dialogElement.showModal();
 }
 
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  // Move balls on screen if resizing smaller
+  for (let ball of balls) {
+    // Clamp x and y so the ball stays fully visible
+    ball.x = constrain(ball.x, ball.r, width - ball.r);
+    ball.y = constrain(ball.y, ball.r, height - ball.r);
+  }
+}
 
-Object.assign(window, { preload, setup, draw, mouseClicked })
+Object.assign(window, { preload, setup, draw, mouseClicked, windowResized })

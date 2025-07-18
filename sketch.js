@@ -13,6 +13,7 @@ let fill2 = SCITECH_ORANGE
 // const fill2 = "#FF0000"
 
 let endTime
+let isOption3 = false
 
 let notificationSound
 let alarmPlayed = false
@@ -49,16 +50,7 @@ function setup() {
         })
     }
 
-    // let endTimeString = prompt("End time (HH:MM)?", `${defaultEndTime.getHours()}:${defaultEndTime.getMinutes()}`)
-    // endTime = parseTimeString(endTimeString)
-
     showSettingsDialog()
-
-    // console.log("balls.length: ", balls.length)
-    // balls = [
-    //   new Ball(100, 100, 25, 2),
-    //   new Ball(200, 200, 25, 3)
-    // ]
 
     textFont("Calibri, Arial, sans-serif")
 }
@@ -74,8 +66,6 @@ function handleSettingsChange() {
             new Ball(random(25, width - 25), random(25, height - 25), 25, v)
         )
     }
-
-    loop() // why is this necessary? I didn't call noLoop()
 }
 
 let balls = []
@@ -84,17 +74,6 @@ let balls = []
 // * https://codeguppy.com/blog/how-to-implement-collision-detection-between-two-circles-using-p5.js/index.html
 // * https://editor.p5js.org/aferriss/sketches/S1Q6Q1J2b
 //
-
-// function getYValue(key) {
-//   let _y = balls[0].y
-//   if (key == 'w') {
-//     return _y - 1
-//   }
-//   if (key == 's') {
-//     return _y + 1
-//   }
-//   return _y
-// }
 
 function draw() {
     let timeRemaining = endTime - new Date()
@@ -116,7 +95,6 @@ function draw() {
     }
 
     if (timeRemaining <= 0 && !alarmPlayed) {
-        console.log("Time's up! (should only see this once)") // debugging
         alarmPlayed = true
         let count = 0
         // play once, then 4 more times at an interval (total 5 times)
@@ -144,10 +122,6 @@ function draw() {
     fill(fill1)
     strokeWeight(2)
     stroke(SCITECH_DARKBLUE)
-
-    // if (keyIsPressed) {
-    //   ball[0].y = getYValue(key)
-    // }
 
     for (let ball of balls) {
         for (let ball2 of balls) {
@@ -201,9 +175,11 @@ function drawGameOver() {
 }
 
 function mouseClicked() {
-    //   let v = random(1, 5)
-    //   balls.push(new Ball(mouseX, mouseY, 25, 2))
-    //   console.log(balls.length)
+    if (isOption3) {
+        let v = random(1, 5)
+        balls.push(new Ball(mouseX, mouseY, 25, v))
+        console.log(balls.length)
+    }
 }
 
 function checkCircleCircleCollision(ball1, ball2) {
@@ -236,7 +212,7 @@ function showSettingsDialog() {
             let addMinutes = parseInt(fd.get("minutes"))
             endTime = new Date(Date.now() + addMinutes * 60 * 1000)
         } else if (opt == 3) {
-            // TODO: option 3 (click to spawn - old code?)
+            isOption3 = true // click to spawn
         }
 
         handleSettingsChange()

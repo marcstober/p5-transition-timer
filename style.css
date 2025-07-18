@@ -8,3 +8,13 @@ body {
 canvas {
     display: block;
 }
+
+.button-row {
+    margin-top: 1em;
+    display: flex;
+    justify-content: flex-end;
+}
+
+fieldset {
+    margin: 0;
+}

@@ -192,11 +192,13 @@ function showSettingsDialog() {
     const dialogElement = document.getElementById("settings-dialog")
     const okButton = document.getElementById("ok-button")
     // TODO: all the default end times for workshop
-    let defaultEndTime = new Date(Date.parse("1970-01-01T20:20:00.000"))
-
-    document.getElementById(
-        "end-time"
-    ).value = `${defaultEndTime.getHours()}:${defaultEndTime.getMinutes()}`
+    let now = new Date()
+    let defaultEndTime = new Date(now.getTime() + 60 * 60 * 1000)
+    let hour = defaultEndTime.getHours() % 12 || 12
+    document.getElementById("end-time").value = `${hour}:${defaultEndTime
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")}`
 
     const dlg = document.getElementById("settings-dialog")
     dlg.addEventListener("submit", (e) => {
@@ -204,10 +206,16 @@ function showSettingsDialog() {
         const fd = new FormData(e.target)
         const opt = fd.get("radio")
 
-        if (opt == 2) {
+        if (opt == 1) {
             // end time
             endTime = parseTimeString(document.getElementById("end-time").value)
-        } else if (opt == 1) {
+            // infer AM/PM as follows:
+            // if current time is later than end time AM, make it PM
+            // if current time is later than end time PM, make it AM the next day
+            while (endTime < new Date()) {
+                endTime.setHours(endTime.getHours() + 12)
+            }
+        } else if (opt == 2) {
             // minutes
             let addMinutes = parseInt(fd.get("minutes"))
             endTime = new Date(Date.now() + addMinutes * 60 * 1000)
